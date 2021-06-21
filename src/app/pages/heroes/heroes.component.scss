@@ -1,0 +1,59 @@
+@import '../../../variables';
+
+:host{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 100%;
+}
+
+header{
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    flex-basis: 64px;
+    flex-shrink: 0;
+    background: $color-background;
+    z-index: 100;
+}
+
+.menu-toggle{
+    font-family: $site-font;
+    font-size: 20px;
+}
+
+::ng-deep .main-menu{
+    width: 420px;
+    max-width: 80vw;
+    position: relative;
+    .mat-menu-content:not(:empty){
+        padding: 3rem 2rem;
+        width: 100%;
+        > button:not(.menu-close){
+            width: 100%;
+        }
+    }
+}
+
+.menu-close{
+    position: absolute;
+    top: 0;
+    right: 1em;
+    mat-icon{
+        font-size: 1rem;
+        width: auto;
+        height: auto;
+    }
+}
+
+.menu-sign-out{
+    margin-bottom: 2em;
+}
+
+main{
+    flex-grow: 1;
+}

@@ -1,0 +1,36 @@
+<div class="card login-container">
+    <div class="login-social">
+        <h2>Continúe con</h2>
+        <button class="btn soft-shadow" (click)="signInWithGoogle()">
+            <img src="assets/images/logo_google.svg" alt="Google logo">
+        </button>
+        <button class="btn soft-shadow">
+            <img src="assets/images/logo_facebook.svg" alt="Facebook logo">
+        </button>
+    </div>
+    <hr>
+    <div class="login-email">
+        <h2>O ingrese con correo</h2>
+        <form class="login-form" [formGroup]="loginForm">
+            <mat-form-field class="full-width">
+                <mat-icon matPrefix>person_outlined</mat-icon>
+                <mat-label>Correo electrónico</mat-label>
+                <input type="email" matInput required formControlName="email">
+                <mat-icon matSuffix class="green" *ngIf="email.valid">done</mat-icon>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-icon matPrefix>lock_outline</mat-icon>
+                <mat-label>Contraseña</mat-label>
+                <input type="password" matInput required formControlName="pass">
+                
+                <mat-icon matSuffix *ngIf="pass.invalid && (pass.touched)" color="warn">close</mat-icon>
+                <mat-error *ngIf="pass.invalid && (pass.dirty || pass.touched)">
+                    Mínimo 6 caracteres
+                </mat-error>
+
+            </mat-form-field>
+
+            <button mat-flat-button color="warn" type="submit" class="btn btn-round btn-block login-submit">Iniciar sesión</button>
+        </form>
+    </div>
+</div>

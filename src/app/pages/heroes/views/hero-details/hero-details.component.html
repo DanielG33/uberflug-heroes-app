@@ -1,0 +1,32 @@
+<section class="hero-container container">
+    <div class="thumbnail-container card">
+        <img [src]="hero?.thumbnail" alt="Hero thumbnail">
+    </div>
+    <div class="details-container card">
+        <app-fav></app-fav>
+        <h1 class="title">{{hero?.name}}</h1>
+        <p>
+            <small>Updated {{hero?.modified | date}}</small>
+        </p>
+        <p>{{hero?.description}}</p>
+    </div>
+</section>
+
+<section class="comics-container container" *ngIf="comics.length">
+  <h2 class="title uppercase">Comics</h2>
+  <owl-carousel-o [options]="customOptions" #comicsCarousel>
+
+    <ng-container *ngFor="let comic of comics; index as i">
+      <ng-template carouselSlide [id]="i">
+        <div class="comic" (click)="showComic(comic)">
+          <img [src]="comic.thumbnail" class="thumbnail card" aria-hidden="true">
+          <h3 class="title">{{comic.title}}</h3>
+        </div>
+      </ng-template>
+    </ng-container>
+
+  </owl-carousel-o>
+
+</section>
+
+<app-comic *ngIf="comicDetails" [comic]="comicDetails" (close)="comicDetails = false"></app-comic>

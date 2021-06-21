@@ -1,0 +1,46 @@
+<section role="search" class="container search-bar-container" *ngIf="!isFavorite">
+    <form class="search-bar" [formGroup]="searchForm">
+        <mat-icon matPrefix>search</mat-icon>
+        <input type="search" formControlName="name" placeholder="Search characters" aria-label="search characters">
+    </form>
+</section>
+
+<section role="items-container" class="heroes-container">
+
+    <div class="container items-header">
+        <span class="resutls-count">{{heroes?.length}} Resultados</span>
+        <label class="sort">
+            <input
+                type="checkbox"
+                #reverseOrder
+                (change)="switchOrder(reverseOrder.checked)"
+                aria-label="Switch results sorting ascendant/descendant"
+                [disabled]="loadingResults">
+
+            <span class="order-indicator">
+                <mat-icon>expand_less</mat-icon>
+                <mat-icon>expand_more</mat-icon>
+            </span>
+        </label>
+    </div>
+    <div class="container items-grid"
+        #heroesScrollArea
+        infiniteScroll
+        [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="50"
+        [immediateCheck]=true
+        (scrolled)="getHeroes(heroes.length)">
+        <article class="hero-card" *ngFor="let hero of heroes">
+
+            <app-fav [hero]="hero" [active]="favorites[hero.id] || isFavorite"></app-fav>
+            
+            <div class="hero-content" [routerLink]="['/heroes/detalles', hero.id]">
+                <img [src]="hero.thumbnail" class="background" aria-hidden="true">
+                <h2 class="title">{{hero.name}}</h2>
+            </div>
+        </article>
+    </div>
+
+    <mat-spinner *ngIf="loadingResults" class="list-spinner"></mat-spinner>
+    
+</section>

@@ -1,0 +1,56 @@
+:host{
+    display: block;
+    overflow: hidden;
+}
+
+.hero-container{
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    margin-bottom: 112px;
+}
+
+.thumbnail-container{
+    position: relative;
+    flex-basis: 55%;
+    height: 500px;
+    max-height: 60vh;
+    overflow: hidden;
+    img{
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+.details-container{
+    margin-left: -3.6em;
+    flex-basis: 45%;
+    padding: 4.8em 3.6em 2.4em;
+    position: relative;
+    z-index: 1;
+
+    app-fav{
+        position: absolute;
+        top: 1.2rem;
+        right: 2.4rem;
+    }
+
+    .title{
+        font-size: 72px;
+        line-height: 1.2em;
+    }
+}
+
+::ng-deep .owl-carousel .owl-stage-outer{
+    overflow: visible;
+}
+
+.comic{
+    .title{
+        font-size: .8rem;
+        margin-top: .8em;
+    }
+    // opacity: .2;
+}

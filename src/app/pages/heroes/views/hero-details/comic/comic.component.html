@@ -1,0 +1,20 @@
+<div class="card">
+
+    <button mat-icon-button class="btn-close" (click)="emitClose()">
+        <mat-icon>close</mat-icon>
+    </button>
+    
+    <div class="thumbnail-container">
+        <img [src]="comic.thumbnail" class="thumbnail shadow" alt="Comic thumbnail">
+    </div>
+    <div class="details-container">
+        <h1 class="title">{{comic.title }}</h1>
+        <p class="issue-number">
+            <small>#{{comic.issueNumber}} </small>
+        </p>
+        <p class="publishing-date">
+            <small>Published {{comic.modified | date}} </small>
+        </p>
+        <p class="description">{{comic.description}}</p>
+    </div>
+</div>

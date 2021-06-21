@@ -1,0 +1,19 @@
+button{
+    display: grid;
+    border: none;
+    place-content: center;
+    padding: .6em .4em;
+    border-radius: 4px;
+    background: rgba($color: #e2e2e2, $alpha: .4);
+    cursor: pointer;
+}
+
+mat-icon{
+    font-size: 2em;
+    height: auto;
+    width: auto;
+}
+
+.active{
+    color: #b81313;
+}

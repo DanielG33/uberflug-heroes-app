@@ -1,0 +1,25 @@
+<header class="container">
+    <img src="assets/images/logo.png" alt="logo" class="logo">
+    
+    <button mat-button class="menu-toggle" [matMenuTriggerFor]="mainMenu">
+        Menu
+        <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #mainMenu="matMenu" class="main-menu">
+        <button mat-icon-button class="menu-close" aria-label="Close main menu">
+            <mat-icon>close</mat-icon>
+        </button>
+
+        <button mat-flat-button color="warn" class="btn btn-round menu-sign-out" (click)="signOut()">
+            Cerrar sesión
+        </button>
+
+        <a mat-menu-item routerLink="/heroes">Todos</a>
+        <mat-divider></mat-divider>
+        <a mat-menu-item routerLink="/heroes/favoritos">Favoritos</a>
+    </mat-menu>
+</header>
+
+<main>
+    <router-outlet></router-outlet>
+</main>
