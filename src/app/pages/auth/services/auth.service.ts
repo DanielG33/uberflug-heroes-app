@@ -20,15 +20,11 @@ export class AuthService {
     await this.auth.signInWithRedirect(provider);
 
     const res = await this.auth.getRedirectResult();
-    return (await this.auth.getRedirectResult()).user;
+    return res.user;
   }
 
   async signOut(): Promise<void> {
-    try{
-      await this.auth.signOut();
-      this.router.navigate(['/auth'])
-    }catch(err){
-      //...
-    }
+    await this.auth.signOut();
+    this.router.navigate(['/auth'])
   }
 }

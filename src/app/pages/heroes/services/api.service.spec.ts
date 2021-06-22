@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { ApiService } from './api.service';
+import { environment } from "../../../../environments/environment";
 import { Hero, HeroesResponse } from "../models/hero";
 import { Comic, ComicsResponse } from '../models/comic';
 
@@ -21,7 +22,7 @@ describe('ApiService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('getHeroes() should return Observable<Hero[]>', () => {
+  describe('Hereos methods', () =>{
     const date = new Date();
     const dummyHeroesResponse:HeroesResponse = {
       code: 200,
@@ -59,64 +60,31 @@ describe('ApiService', () => {
         modified: date,
       }
     ]
-
-    service.getHeroes().subscribe(res => {
-      expect(res).toEqual(dummyHeroes)
+    
+    it('getHeroes() should return Observable<Hero[]>', () => {
+  
+      service.getHeroes().subscribe(res => {
+        expect(res).toEqual(dummyHeroes)
+      })
+  
+      const req = httpMock.expectOne(`${environment.api_url}/characters?orderBy=name&limit=12&apikey=${environment.api_key}`);
+      expect(req.request.method).toBe('GET');
+      req.flush(dummyHeroesResponse);
+  
     })
-
-    const req = httpMock.expectOne('https://gateway.marvel.com/v1/public/characters?orderBy=name&limit=12&apikey=05625341a4b9b4e948b1e3efb1ef0ed6');
-    expect(req.request.method).toBe('GET');
-    req.flush(dummyHeroesResponse);
-
+    
+    it('getHero(heroId:number) should return Observable<Hero>', () => {
+      service.getHero(123).subscribe(res => {
+        expect(res).toEqual(dummyHeroes[0])
+      })
+  
+      const req = httpMock.expectOne(`${environment.api_url}/characters/123?apikey=${environment.api_key}`);
+      expect(req.request.method).toBe('GET');
+      req.flush(dummyHeroesResponse);
+    })
   })
 
-  it('getHero(heroId:number) should return Observable<Hero>', () => {
-    const date = new Date();
-    const dummyHeroesResponse:HeroesResponse = {
-      code: 200,
-      status: 'Ok',
-      data: {
-        results: [
-          {
-            id: 123,
-            name: 'Dummy hero',
-            description: 'Dummy description',
-            modified: date,
-            thumbnail: {
-              path: 'path/to/thumbnail',
-              extension: 'jpg'
-            },
-            comics: {
-              items: [
-                {
-                  resourceURI: 'https://test.com/comic',
-                  name: 'Dummy comic'
-                }
-              ]
-            }
-          }
-        ]
-      }
-    }
-
-    const dummyHero:Hero = {
-      id: 123,
-      name: 'Dummy hero',
-      thumbnail: 'path/to/thumbnail.jpg',
-      description: 'Dummy description',
-      modified: date,
-    }
-
-    service.getHero(123).subscribe(res => {
-      expect(res).toEqual(dummyHero)
-    })
-
-    const req = httpMock.expectOne('https://gateway.marvel.com/v1/public/characters/123?apikey=05625341a4b9b4e948b1e3efb1ef0ed6');
-    expect(req.request.method).toBe('GET');
-    req.flush(dummyHeroesResponse);
-  })
-
-  it('getComics() should return Observable<Comic[]>', () => {
+  describe('Comics methods', () =>{
     const date = new Date();
     const dummyComicsResponse:ComicsResponse = {
       code: 200,
@@ -137,7 +105,6 @@ describe('ApiService', () => {
         ]
       }
     }
-
     const dummyComics:Comic[] = [
       {
         id: 123,
@@ -149,54 +116,26 @@ describe('ApiService', () => {
       }
     ]
 
-    service.getComics(123).subscribe(res => {
-      expect(res).toEqual(dummyComics)
+    it('getComics() should return Observable<Comic[]>', () => {
+  
+      service.getComics(123).subscribe(res => {
+        expect(res).toEqual(dummyComics)
+      })
+  
+      const req = httpMock.expectOne(`${environment.api_url}/characters/123/comics?limit=10&apikey=${environment.api_key}`);
+      expect(req.request.method).toBe('GET');
+      req.flush(dummyComicsResponse);
+  
     })
-
-    const req = httpMock.expectOne('https://gateway.marvel.com/v1/public/characters/123/comics?limit=10&apikey=05625341a4b9b4e948b1e3efb1ef0ed6');
-    expect(req.request.method).toBe('GET');
-    req.flush(dummyComicsResponse);
-
-  })
-
-  it('getComic(comicId:number) should return Observable<Comic>', () => {
-    const date = new Date();
-    const dummyComicsResponse:ComicsResponse = {
-      code: 200,
-      status: 'Ok',
-      data: {
-        results: [
-          {
-            id: 456,
-            title: 'Dummy comic',
-            description: 'Dummy description',
-            modified: date,
-            issueNumber: 1,
-            thumbnail: {
-              path: 'path/to/thumbnail',
-              extension: 'jpg'
-            }
-          }
-        ]
-      }
-    }
-
-    const dummyComic:Comic = {
-      id: 456,
-      title: 'Dummy comic',
-      thumbnail: 'path/to/thumbnail.jpg',
-      description: 'Dummy description',
-      modified: date,
-      issueNumber: 1,
-    }
-
-    service.getComic(456).subscribe(res => {
-      expect(res).toEqual(dummyComic)
+    
+    it('getComic(comicId:number) should return Observable<Comic>', () => {
+      service.getComic(456).subscribe(res => {
+        expect(res).toEqual(dummyComics[0])
+      })
+  
+      const req = httpMock.expectOne(`${environment.api_url}/comics/456?apikey=${environment.api_key}`);
+      expect(req.request.method).toBe('GET');
+      req.flush(dummyComicsResponse);
     })
-
-    const req = httpMock.expectOne('https://gateway.marvel.com/v1/public/comics/456?apikey=05625341a4b9b4e948b1e3efb1ef0ed6');
-    expect(req.request.method).toBe('GET');
-    req.flush(dummyComicsResponse);
-
   })
 });

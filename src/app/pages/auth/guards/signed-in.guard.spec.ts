@@ -4,42 +4,69 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
 import { SignedInGuard } from './signed-in.guard';
 import { AuthService } from "../services/auth.service";
+import { of } from 'rxjs';
 
-fdescribe('SignedInGuard', () => {
+describe('SignedInGuard', () => {
   let guard: SignedInGuard;
-  let routerSpy: Router;
-  let authServiceStub: Partial<AuthService>;
+  let router: Router;
+  let authService;
+  
+  let AuthSpy = {
+    checkAuth: () => of({})
+  }
+  let RouterSpy = { navigate: jasmine.createSpy('navigate') };
 
-  const dummyRoute = {} as ActivatedRouteSnapshot;
-  const fakeUrls = ['/', '/heroes'];
+  const route = Object.assign({}, ActivatedRouteSnapshot.prototype, {
+    params: {},
+    parent: {
+      params: {}
+    }
+  })
 
   beforeEach(() => {
-    routerSpy = jasmine.createSpyObj<Router>('Router', ['navigate']);
-    authServiceStub = {}
-    guard = new SignedInGuard(routerSpy, authServiceStub as AuthService);
-    
     TestBed.configureTestingModule({
       imports: [ RouterTestingModule ],
       providers: [
-        { provice: AuthService, useValue: authServiceStub }
+        { provide: Router, useValue: RouterSpy },
+        { provide: AuthService, useValue: AuthSpy }
       ]
     });
     guard = TestBed.inject(SignedInGuard);
+    router = TestBed.inject(Router)
+    authService = TestBed.inject(AuthService)
   });
 
   it('should be created', () => {
     expect(guard).toBeTruthy();
   });
 
-  describe('when the user is logged in', () => {
+  describe('when user is logged in', () => {
     beforeEach(() => {
-      authServiceStub.checkAuth = jasmine.createSpy('checkAuth').and.returnValue(true)
+      authService.checkAuth = () => of({
+        name: 'Dummy user',
+        email: 'dummy@email.com',
+        uid: 'ABC123'
+      })
     });
+
+    it('should continue', () => {
+      guard.canActivate(route, null).subscribe( res => {
+        expect(res).toBeTruthy()
+      })
+    })
   });
   
   describe('when the user is logged out', () => {
     beforeEach(() => {
-      authServiceStub.checkAuth = jasmine.createSpy('checkAuth').and.returnValue(false)
+      authService.checkAuth = () => of(null)
+      let router = { navigate: jasmine.createSpy('navigate') };
     });
+
+    it('should redirect to /auth', () => {
+      guard.canActivate(route, null).subscribe( res => {
+        expect(res).toBeFalsy()
+        expect(router).toHaveBeenCalledOnceWith(['/auth'])
+      })
+    })
   });
 });

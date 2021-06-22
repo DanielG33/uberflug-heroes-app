@@ -53,15 +53,14 @@ export class HeroDetailsComponent implements OnInit {
 
   private getHero(){
     const id = this.getHeroId();
-    this.apiSvc.getHero(id).subscribe( res => {
+    this.apiSvc.getHero(id).subscribe( (res:Hero) => {
       this.hero = res;
     })
   }
 
   private getComics(){
     const heroId = this.getHeroId();
-    this.apiSvc.getComics(heroId).subscribe( res => {
-      console.log(res)
+    this.apiSvc.getComics(heroId).subscribe( (res:Comic[]) => {
       this.comics = res;
     })
   }

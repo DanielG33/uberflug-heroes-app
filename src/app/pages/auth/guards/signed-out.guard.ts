@@ -12,7 +12,7 @@ export class SignedOutGuard implements CanActivate {
   
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    state: RouterStateSnapshot): Observable<boolean | UrlTree> {
       return this.authService.checkAuth().pipe(
         map((user) => {
           if (user === null)
@@ -22,7 +22,7 @@ export class SignedOutGuard implements CanActivate {
         }),
         tap((res) => {
           if (!res)
-            return this.router.navigate(['/']);
+            return this.router.navigate(['/heroes']);
             
           return route;
         })
