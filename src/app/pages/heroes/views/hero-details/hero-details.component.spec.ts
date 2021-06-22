@@ -1,9 +1,25 @@
+import { Component, Input } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from "@angular/router/testing";
 
 import { HeroDetailsComponent } from './hero-details.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Comic } from '../../models/comic';
+
+@Component({
+  selector: 'app-fav',
+  template: '',
+})
+class FavComponent{
+}
+
+@Component({
+  selector: 'app-comic',
+  template: '',
+})
+class ComicComponent{
+  @Input('comic') comic:any;
+}
 
 describe('HeroDetailsComponent', () => {
   let component: HeroDetailsComponent;
@@ -11,7 +27,7 @@ describe('HeroDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HeroDetailsComponent ],
+      declarations: [ HeroDetailsComponent, FavComponent, ComicComponent ],
       imports: [
         RouterTestingModule,
         HttpClientTestingModule

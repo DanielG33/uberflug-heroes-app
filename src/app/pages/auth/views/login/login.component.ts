@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   }
 
   public signInWithGoogle(){
-    this.authSvc.signInWithGoogle();
+    return this.authSvc.signInWithGoogle()
   }
 
   private buildForm(){

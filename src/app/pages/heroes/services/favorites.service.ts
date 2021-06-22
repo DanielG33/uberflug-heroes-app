@@ -12,10 +12,10 @@ export class FavoritesService {
 
   public keys:any = {};
   
-  constructor(private firestore: AngularFirestore) {
+  constructor(public firestore: AngularFirestore) {
   }
 
-  public getFavorites(last:string = '', reverseOrder:boolean = false, limit:number = null){
+  public getFavorites(last:string = '', reverseOrder:boolean = false, limit:number = null):Observable<Hero[]>{
     return this.firestore.collection<Hero>('users/TestingUID/heroes', ref => {
       
       let filtered = ref.orderBy('name', (reverseOrder ? 'desc' : 'asc') )
@@ -40,25 +40,25 @@ export class FavoritesService {
     )
   }
 
-  public async addFav(hero:Hero): Promise<void> {
+  public async addFav(hero:Hero): Promise<Hero | boolean> {
     await this.firestore
-      .collection('users')
-      .doc('TestingUID')
-      .collection('heroes')
+      .collection(`users/TestingUID/heroes`)
       .doc(String(hero.id))
       .set({
         ...hero,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
+
+    return hero;
   }
 
-  public async removeFav(id:number): Promise<void> {
+  public async removeFav(id:number): Promise<boolean> {
     await this.firestore
-      .collection('users')
-      .doc('TestingUID')
-      .collection('heroes')
+      .collection(`users/TestingUID/heroes`)
       .doc(String(id))
       .delete();
+
+    return true
   }
 }

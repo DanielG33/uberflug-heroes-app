@@ -94,7 +94,7 @@ export class ApiService {
     return comics;
   }
   
-  private buildQS(params:any = {}){
+  private buildQS(params:any = {}):string{
     
     this.heroesQueryConfig.nameStartsWith = params.name;
     this.heroesQueryConfig.orderBy = params.reverseOrder ? '-name' : 'name';

@@ -23,10 +23,9 @@ export class FavComponent implements OnInit {
   @HostListener('click')
     async toggleFav(){
       if(this.active){
-        console.log('remove Fav')
-        await this.favSvc.removeFav(this.hero.id);
-        return;
+        return await this.favSvc.removeFav(this.hero.id);
       }
-      await this.favSvc.addFav(this.hero);
+
+      return await this.favSvc.addFav(this.hero);
     }
 }

@@ -46,11 +46,28 @@ describe('ApiService', () => {
                 }
               ]
             }
-          }
+          },
+          {
+            id: 456,
+            name: 'Second Dummy hero',
+            description: 'Dummy description',
+            modified: date,
+            thumbnail: {
+              path: 'path/to/thumbnail',
+              extension: 'jpg'
+            },
+            comics: {
+              items: [
+                {
+                  resourceURI: 'https://test.com/comic',
+                  name: 'Dummy comic'
+                }
+              ]
+            }
+          },
         ]
       }
     }
-
     const dummyHeroes:Hero[] = [
       {
         id: 123,
@@ -58,13 +75,24 @@ describe('ApiService', () => {
         thumbnail: 'path/to/thumbnail.jpg',
         description: 'Dummy description',
         modified: date,
-      }
+      },
+      {
+        id: 456,
+        name: 'Second Dummy hero',
+        thumbnail: 'path/to/thumbnail.jpg',
+        description: 'Dummy description',
+        modified: date,
+      },
     ]
     
-    it('getHeroes() should return Observable<Hero[]>', () => {
+    it('should return Observable<Hero[]> on getHeroes(params?)', () => {
   
       service.getHeroes().subscribe(res => {
         expect(res).toEqual(dummyHeroes)
+      })
+
+      service.getHeroes({reverseOrder: true}).subscribe(res => {
+        expect(res).toEqual(dummyHeroes.reverse())
       })
   
       const req = httpMock.expectOne(`${environment.api_url}/characters?orderBy=name&limit=12&apikey=${environment.api_key}`);
@@ -73,7 +101,7 @@ describe('ApiService', () => {
   
     })
     
-    it('getHero(heroId:number) should return Observable<Hero>', () => {
+    it('should return Observable<Hero> on getHero(heroId:number)', () => {
       service.getHero(123).subscribe(res => {
         expect(res).toEqual(dummyHeroes[0])
       })

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { Hero } from '../models/hero';
 
 import { FavoritesService } from './favorites.service';
@@ -9,31 +9,35 @@ describe('FavoritesService', () => {
   let service: FavoritesService;
   let angularFirestore: AngularFirestore;
 
-  const date = new Date();
-  const input: Hero[] = [
+  const dummyHeroes: Hero[] = [
     {
       id: 123,
       name: 'Dummy hero',
       thumbnail: 'path/to/thumbnail.jpg',
       description: 'Dummy description',
-      modified: date
+      modified: new Date()
     }
   ];
 
-  const data:Observable<Hero> = from(input);
+  const docSpy = jasmine.createSpyObj({
+    update: () => jasmine.createSpy('update').and.resolveTo(null),
+    set: () => jasmine.createSpy('update').and.resolveTo(null),
+    delete: () => jasmine.createSpy('update').and.resolveTo(null),
+  })
+  
+  const collectionSpy = jasmine.createSpyObj({
+    valueChanges: of(dummyHeroes),
+    doc: docSpy
+  })
 
-  const collectionStub = {
-  valueChanges: jasmine.createSpy('valueChanges').and.returnValue(data)
-  }
-
-  const angularFiresotreStub = {
-  collection: jasmine.createSpy('collection').and.returnValue(collectionStub)
-  }
+  const angularFireSpy = jasmine.createSpyObj('AngularFirestore', {
+    collection: collectionSpy
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        { provide: AngularFirestore, useValue: angularFiresotreStub }
+        { provide: AngularFirestore, useValue: angularFireSpy }
       ]
     });
     service = TestBed.inject(FavoritesService);
@@ -43,4 +47,21 @@ describe('FavoritesService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should return Obsrervable<Hero[]> on getFavorites()', () => {
+    service.getFavorites().subscribe(res => {
+      expect(res).toEqual(dummyHeroes)
+    })
+  })
+  
+  it('should return Promise<Hero> on addFav(Hero)', async() => {
+      const res = await service.addFav(dummyHeroes[0]);
+      expect(res).toBe(dummyHeroes[0]);
+  })
+
+  it('should return Promise<true> on removeFav(Number)', async() => {
+      const res = await service.removeFav(1);
+      expect(res).toBe(true);
+  })
+
 });

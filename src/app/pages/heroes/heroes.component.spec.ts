@@ -8,8 +8,10 @@ import { AuthService } from '../auth/services/auth.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
 import { of } from 'rxjs';
 import { Component } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('HeroesComponent', () => {
   let component: HeroesComponent;
@@ -25,6 +27,8 @@ describe('HeroesComponent', () => {
       declarations: [ HeroesComponent ],
       imports: [
         HttpClientTestingModule,
+        FormsModule,
+        ReactiveFormsModule,
         RouterTestingModule.withRoutes([
           {
             path: 'auth',
@@ -33,7 +37,8 @@ describe('HeroesComponent', () => {
         ]),
         MatMenuModule,
         MatButtonModule,
-        MatIconModule
+        MatIconModule,
+        MatDividerModule
       ],
       providers: [
         { provide: AuthService, useValue: AuthServiceSpy }
